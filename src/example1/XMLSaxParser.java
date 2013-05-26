@@ -34,7 +34,7 @@ package example1;
 	              XMLSaxParser handler = new XMLSaxParser();
 
 	              //Finally, tell the parser to parse the input and notify the handler
-	              sp.parse("data/accountData.xml", handler);
+	              sp.parse("data/accounts.xml", handler);
 	             
 	              handler.readList();
 
