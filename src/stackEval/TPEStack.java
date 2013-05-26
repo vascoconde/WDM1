@@ -8,8 +8,10 @@ class TPEStack {
 	Stack <Match> matches;
 	TPEStack spar;
  
-	public TPEStack(){
-		
+	public TPEStack(PatternNode p, TPEStack parentStack){
+		this.p = p;
+		this.spar = parentStack;
+		this.matches = new Stack<Match>();
 	}
 	
 	public ArrayList<TPEStack> getDescendantStacks()
