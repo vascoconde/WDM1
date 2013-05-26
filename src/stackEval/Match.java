@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Match {
-
+	public enum State {OPEN, CLOSED};
 	int start;
-	int state;
+	State state;// 1:Open or 0:Closed
 	Match parent;
 	Map <PatternNode, ArrayList<Match>> children;
-	TPEStack st;
+	TPEStack stack;
 
 	
 	public Match(int currentPre, Match top, TPEStack s) {
@@ -17,23 +17,19 @@ public class Match {
 	}
 
 
-	public int getStatus() {
-		//todo
-		return 0;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public State getStatus() {
+		return state;
 	}
 
 
 	public void close() {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public TPEStack getTPEStack() {
+		return stack;
 	}
 	
 

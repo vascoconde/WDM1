@@ -7,6 +7,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import stackEval.Match.State;
+
 public class StackEval extends DefaultHandler {
 
 	//TreePattern q;
@@ -36,9 +38,8 @@ public class StackEval extends DefaultHandler {
 
 		System.out.format("Start Element: %s\n", qName);
 
-
 		for(TPEStack s : rootStack.getDescendantStacks()){
-			if(qName == s.p.name /*&& s.spar.top().status == open*/){
+			if(qName == s.p.name && s.spar.top().getStatus() == State.OPEN){
 				Match m = new Match(currentPre, s.spar.top(), s);
 				// create a match satisfying the ancestor conditions
 				// of query node s.p
@@ -54,10 +55,10 @@ public class StackEval extends DefaultHandler {
 			// by the attributes of the currently started element
 			for (TPEStack s : rootStack.getDescendantStacks()){
 
-				/*if (a == s.p.name && s.par.top().status == open){
+				if (a == s.p.name && s.getSpar().top().getStatus() == State.OPEN){
 					Match ma = new Match(currentPre, s.spar.top(), s);
 					s.push(ma);
-				}*/
+				}
 
 			}
 			currentPre ++;

@@ -14,8 +14,11 @@ class TPEStack {
 	
 	public ArrayList<TPEStack> getDescendantStacks()
 	{
-		// gets the stacks for all descendants of p
-		return null;
+		ArrayList<TPEStack> temp = new ArrayList<TPEStack>();
+		for(Match m : matches) {
+			temp.add(m.getTPEStack());
+		}
+		return temp;
 
 	}
 	public void push(Match m){ 
@@ -28,5 +31,9 @@ class TPEStack {
 	
 	public Match pop(){ 
 		return matches.pop(); 
+	}
+
+	public TPEStack getSpar() {
+		return spar;
 	}
 } 
