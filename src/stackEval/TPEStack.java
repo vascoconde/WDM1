@@ -8,6 +8,10 @@ class TPEStack {
 	Stack <Match> matches;
 	TPEStack spar;
  
+	public TPEStack(){
+		
+	}
+	
 	public ArrayList<TPEStack> getDescendantStacks()
 	{
 		// gets the stacks for all descendants of p
