@@ -8,11 +8,10 @@ public class Match {
 	public enum State {OPEN, CLOSED};
 	int start;
 	State state;
-	Match parent;
-	Map<PatternNode, ArrayList<Match>> children;
+	Match parent; /* Ancestor conditions */
+	Map<PatternNode, ArrayList<Match>> children; /* Descendant Conditions */
 	TPEStack stack;
 
-	
 	public Match(int currentPre, Match top, TPEStack s) {
 		this.start = currentPre;
 		this.stack = s;

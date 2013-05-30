@@ -7,8 +7,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class StackEval extends DefaultHandler {
 
-	//TreePattern q;
-	TPEStack rootStack; // stack for the root of q
+	TreePattern q;
+	// stack for the root of q
+	TPEStack rootStack;
 	// pre number of the last element which has started:
 	int currentPre = 0;
 	// pre numbers for all elements having started but not ended yet:
@@ -35,7 +36,7 @@ public class StackEval extends DefaultHandler {
 		System.out.format("Start Element: %s\n", qName);
 
 		for(TPEStack s : rootStack.getDescendantStacks()){
-			if(qName == s.p.name && s.spar.top().isOpen()){
+			if(qName.equals(s.p.name) && s.spar.top().isOpen()){
 				Match m = new Match(currentPre, s.spar.top(), s);
 				// create a match satisfying the ancestor conditions
 				// of query node s.p
@@ -46,7 +47,7 @@ public class StackEval extends DefaultHandler {
 		}
 		for (int i = 0; i < attributes.getLength(); i++){
 			String a = attributes.getQName(i);
-			System.out.format("Attribute: %s", a);
+			System.out.format("Attribute: %s\n", a);
 			// similarly look for query nodes possibly matched
 			// by the attributes of the currently started element
 			for (TPEStack s : rootStack.getDescendantStacks()){

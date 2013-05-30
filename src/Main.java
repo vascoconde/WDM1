@@ -1,11 +1,11 @@
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.*;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import stackEval.PatternNode;
 import stackEval.StackEval;
+import stackEval.TPEStack;
+import stackEval.TreePattern;
 
 public class Main {
 
@@ -18,6 +18,10 @@ public class Main {
 			//Now use the parser factory to create a SAXParser object
 			XMLReader sp = XMLReaderFactory.createXMLReader();
 
+			TreePattern tp = new TreePattern("person");
+			tp.root.getP().addChildren(new TPEStack(new PatternNode("email"), tp.root));
+			
+			
 			//Create an instance of this class; it defines all the handler methods
 			StackEval handler = new StackEval();
 

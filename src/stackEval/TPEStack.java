@@ -3,7 +3,7 @@ package stackEval;
 import java.util.ArrayList;
 import java.util.Stack;
 
-class TPEStack {
+public class TPEStack {
 	PatternNode p;
 	Stack <Match> matches;
 	TPEStack spar;
@@ -14,6 +14,14 @@ class TPEStack {
 		this.matches = new Stack<Match>();
 	}
 	
+	public PatternNode getP() {
+		return p;
+	}
+	
+	public Stack<Match> getMatches() {
+		return matches;
+	}
+
 	public ArrayList<TPEStack> getDescendantStacks()
 	{
 		ArrayList<TPEStack> temp = new ArrayList<TPEStack>();
