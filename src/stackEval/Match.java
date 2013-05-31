@@ -6,21 +6,21 @@ import java.util.Map;
 
 public class Match {
 	public enum State {OPEN, CLOSED};
-	int start;
+	int currentPre;
 	State state;
 	Match parent; /* Ancestor conditions */
 	Map<PatternNode, ArrayList<Match>> children; /* Descendant Conditions */
 	TPEStack stack;
 
 	public Match(int currentPre, Match top, TPEStack s) {
-		this.start = currentPre;
+		this.currentPre = currentPre;
 		this.stack = s;
 		this.state = State.OPEN;
 		this.parent = top;
 		this.children = new HashMap<PatternNode, ArrayList<Match>>();
 	}
 	
-	public int getStart() { return start;}
+	public int getStart() { return currentPre;}
 	public Match getParent() { return parent; }
 	public TPEStack getTPEStack() { return stack; }
 	public Map<PatternNode, ArrayList<Match>> getChildren() { return children; }

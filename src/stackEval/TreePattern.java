@@ -8,9 +8,7 @@ public class TreePattern {
 		root = new TPEStack(new PatternNode(rootName), null);
 	}
 	
-	public TPEStack getRoot() {
-		return root;
-	}
+	public TPEStack getRoot() { return root; }
 	
 	
 	

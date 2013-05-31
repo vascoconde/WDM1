@@ -12,12 +12,12 @@ public class PatternNode {
 		children = new ArrayList<TPEStack>();
 	}
 	
-	public void addChildren(TPEStack node) {
-		children.add(node);
+	public ArrayList<TPEStack> getChildren() { return children; }
+
+	public TPEStack addChildren(String name, TPEStack parent) {
+		TPEStack s = new TPEStack(new PatternNode(name), parent);
+		children.add(s);
+		return s;
 	}
 	
-	public ArrayList<TPEStack> getChildren() {
-		return children;
-	}
-
 }

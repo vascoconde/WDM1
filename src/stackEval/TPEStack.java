@@ -24,10 +24,18 @@ public class TPEStack {
 
 	public ArrayList<TPEStack> getDescendantStacks()
 	{
-		ArrayList<TPEStack> temp = new ArrayList<TPEStack>();
-		for(Match m : matches) {
-			temp.add(m.getTPEStack());
+		ArrayList<TPEStack> temp = new ArrayList<TPEStack>(p.children) ;
+		System.out.println(p.name+" childrens: "+p.children);
+		TPEStack s = null;
+		int counter = temp.size();
+		System.out.println("Descendants de: "+this.p.name);
+		for(int i=0; i<counter; i++) {
+			s = temp.get(i);
+			System.out.println(s.p.name+" childrens: "+s.p.children);
+			temp.addAll(s.p.children);
+			counter += s.p.children.size();
 		}
+		System.out.println();
 		return temp;
 
 	}
@@ -45,5 +53,9 @@ public class TPEStack {
 
 	public TPEStack getSpar() {
 		return spar;
+	}
+
+	public TPEStack addChildren(String name) {
+		return p.addChildren(name, this);
 	}
 } 
