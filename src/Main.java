@@ -5,7 +5,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import stackEval.Match;
-import stackEval.PatternNode;
 import stackEval.StackEval;
 import stackEval.TPEStack;
 import stackEval.TreePattern;

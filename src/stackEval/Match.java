@@ -1,15 +1,15 @@
 package stackEval;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class Match {
 	public enum State {OPEN, CLOSED};
 	int currentPre;
 	State state;
 	Match parent; /* Ancestor conditions */
-	Map<PatternNode, ArrayList<Match>> children; /* Descendant Conditions */
+	Map<PatternNode, Stack<Match>> children; /* Descendant Conditions */
 	TPEStack stack;
 
 	public Match(int currentPre, Match top, TPEStack s) {
@@ -17,13 +17,13 @@ public class Match {
 		this.stack = s;
 		this.state = State.OPEN;
 		this.parent = top;
-		this.children = new HashMap<PatternNode, ArrayList<Match>>();
+		this.children = new HashMap<PatternNode, Stack<Match>>();
 	}
 	
 	public int getStart() { return currentPre;}
 	public Match getParent() { return parent; }
 	public TPEStack getTPEStack() { return stack; }
-	public Map<PatternNode, ArrayList<Match>> getChildren() { return children; }
+	public Map<PatternNode, Stack<Match>> getChildren() { return children; }
 
 	public boolean isOpen() {
 		if(state.equals(State.OPEN))

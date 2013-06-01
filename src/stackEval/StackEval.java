@@ -1,7 +1,7 @@
 package stackEval;
 
-import java.util.ArrayList;
 import java.util.Stack;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -38,7 +38,7 @@ public class StackEval extends DefaultHandler {
 
 		if(qName.equals(rootStack.p.name)) {
 			Match m = new Match(currentPre, null, null);
-			rootStack.push(m); 
+			rootStack.push(m);
 		}
 		
 		for(TPEStack s : rootStack.getDescendantStacks()){
@@ -49,7 +49,7 @@ public class StackEval extends DefaultHandler {
 				// create a match satisfying the ancestor conditions
 				// of query node s.p
 				s.push(m); 
-				s.spar.top().children.put(s.p, new ArrayList<>(s.matches));
+				s.spar.top().children.put(s.p, s.matches);
 			}
 		}
 		
@@ -85,13 +85,25 @@ public class StackEval extends DefaultHandler {
   		int preOflastOpen = preOfOpenNodes.pop();
   		// now look for Match objects having this pre number:
   		
-  		
   		//TODO Caso especial da root da TP
-  		
+		if(qName.equals(rootStack.p.name)) {
+			Match m = rootStack.top();
+				// check if m has child matches for all children
+				// of its pattern node
+				for (TPEStack sChild : rootStack.p.getChildren()){
+					// pChild is a child of the query node for which m was created
+					if (m.children.get(sChild.p) == null){
+						System.out.println("REMOVE!");
+						// m lacks a child Match for the pattern node pChild
+						// we remove m from its Stack, detach it from its parent etc.
+						remove(m, rootStack);
+					}
+				}
+				m.close();
+		}
   		
   		for(TPEStack s :  rootStack.getDescendantStacks()){
   			if (s.p.name.equals(qName) && s.spar.matches.size()!=0 && s.top().isOpen() && s.top().currentPre == preOflastOpen) {
-  				System.out.println("IIIIIFFFFFFFFFFF");
   				// all descendants of this Match have been traversed by now.
   				Match m = s.top();
   				// check if m has child matches for all children
@@ -106,13 +118,15 @@ public class StackEval extends DefaultHandler {
   					}
   				}
   				m.close();
-
   			}
   		}
 	}
 
 	private void remove(Match m, TPEStack s) {
-		s.matches.remove(m);
+		for(Stack<Match> matches : m.children.values()) {
+			remove(matches.peek(), matches.peek().stack);
+			matches.pop();
+		}
 	}
 }
 
