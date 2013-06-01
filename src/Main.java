@@ -1,5 +1,5 @@
 
-import java.util.Stack;
+import java.util.ArrayList;
 
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -33,10 +33,7 @@ public class Main {
 			sp.setContentHandler(handler);
 			sp.parse("data/people.xml");
 
-			printResults("Person",root.getMatches());
-			printResults("Name",name.getMatches());
-			printResults("Email",mail.getMatches());
-			printResults("Last",last.getMatches());
+			printResults(root);
 
 			//handler.readList();
 		} catch(Exception e) {
@@ -45,13 +42,23 @@ public class Main {
 
 	}
 	
-	public static void printResults(String name, Stack<Match> s) {
+	public static void printResults(TPEStack root) {
+		
+		ArrayList<TPEStack> temp = new ArrayList<TPEStack>();
+		temp.add(root);
+		TPEStack s = null;
 		String print = "";
-		print += name+" [";
-		for(Match m : s) {
-			print += String.format(" %s,", m.getStart());
+		int counter = temp.size();
+		for(int i=0; i<counter; i++) {
+			s = temp.get(i);
+			print += String.format("%8s [", s.name);
+			for(Match m : s.getMatches()) {
+				print += String.format(" %s,", m.getStart());
+			}
+			print+="]\n";
+			temp.addAll(s.children);
+			counter += s.children.size();
 		}
-		print+="]";
 		System.out.println(print);
 	}
 

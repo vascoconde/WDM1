@@ -9,7 +9,7 @@ public class Match {
 	int currentPre;
 	State state;
 	Match parent; /* Ancestor conditions */
-	Map<PatternNode, Stack<Match>> children; /* Descendant Conditions */
+	Map<TPEStack, Stack<Match>> children; /* Descendant Conditions */
 	TPEStack stack;
 
 	public Match(int currentPre, Match top, TPEStack s) {
@@ -17,13 +17,13 @@ public class Match {
 		this.stack = s;
 		this.state = State.OPEN;
 		this.parent = top;
-		this.children = new HashMap<PatternNode, Stack<Match>>();
+		this.children = new HashMap<TPEStack, Stack<Match>>();
 	}
 	
 	public int getStart() { return currentPre;}
 	public Match getParent() { return parent; }
 	public TPEStack getTPEStack() { return stack; }
-	public Map<PatternNode, Stack<Match>> getChildren() { return children; }
+	public Map<TPEStack, Stack<Match>> getChildren() { return children; }
 
 	public boolean isOpen() {
 		if(state.equals(State.OPEN))

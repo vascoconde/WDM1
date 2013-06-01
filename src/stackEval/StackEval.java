@@ -17,7 +17,7 @@ public class StackEval extends DefaultHandler {
 	Stack <Integer> preOfOpenNodes;
 
 	public void characters(char[] buffer, int start, int length) {
-		//System.out.format("Characters:%s\n", new String(buffer, start, length));
+		////System.out.format("Characters:%s\n", new String(buffer, start, length));
 	}
 
 	public StackEval(TPEStack root){
@@ -34,32 +34,32 @@ public class StackEval extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName, 
 			Attributes attributes) throws SAXException {
 
-		System.out.format("Start Element: %s\n", qName);
+		//System.out.format("Start Element: %s\n", qName);
 
-		if(qName.equals(rootStack.p.name)) {
+		if(qName.equals(rootStack.name)) {
 			Match m = new Match(currentPre, null, null);
 			rootStack.push(m);
-		}
-		
-		for(TPEStack s : rootStack.getDescendantStacks()){
-			System.out.println("Analysing "+s.p.name+" stack for qName "+qName);
-			if(qName.equals(s.p.name) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
-				System.out.println("##### MATCH FOUND!!");
-				Match m = new Match(currentPre, s.spar.top(), s);
-				// create a match satisfying the ancestor conditions
-				// of query node s.p
-				s.push(m); 
-				s.spar.top().children.put(s.p, s.matches);
+		} else {
+			for(TPEStack s : rootStack.getDescendantStacks()){
+				////System.out.println("Analysing "+s.name+" stack for qName "+qName);
+				if(qName.equals(s.name) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
+					////System.out.println("##### MATCH FOUND!!");
+					Match m = new Match(currentPre, s.spar.top(), s);
+					// create a match satisfying the ancestor conditions
+					// of query node s.p
+					s.push(m); 
+					s.spar.top().children.put(s, s.matches);
+				}
 			}
 		}
 		
 		for (int i = 0; i < attributes.getLength(); i++){
 			String a = attributes.getQName(i);
-			System.out.format("Attribute: %s\n", a);
+			//System.out.format("Attribute: %s\n", a);
 			// similarly look for query nodes possibly matched
 			// by the attributes of the currently started element
 			for (TPEStack s : rootStack.getDescendantStacks()){
-				if (a == s.p.name && s.getSpar().top().isOpen()){
+				if (a == s.name && s.getSpar().top().isOpen()){
 					Match ma = new Match(currentPre, s.spar.top(), s);
 					s.push(ma);
 				}
@@ -77,7 +77,7 @@ public class StackEval extends DefaultHandler {
 	@Override
 	public void endElement(String uri, String localName, String qName)
 			throws SAXException {
-		System.out.println("End Element");
+		////System.out.println("End Element");
 
   		// we need to find out if the element ending now corresponded
   		// to matches in some stacks
@@ -86,40 +86,32 @@ public class StackEval extends DefaultHandler {
   		// now look for Match objects having this pre number:
   		
   		//TODO Caso especial da root da TP
-		if(qName.equals(rootStack.p.name)) {
-			Match m = rootStack.top();
-				// check if m has child matches for all children
-				// of its pattern node
-				for (TPEStack sChild : rootStack.p.getChildren()){
-					// pChild is a child of the query node for which m was created
-					if (m.children.get(sChild.p) == null){
-						System.out.println("REMOVE!");
-						// m lacks a child Match for the pattern node pChild
-						// we remove m from its Stack, detach it from its parent etc.
-						remove(m, rootStack);
-					}
-				}
-				m.close();
+		if(qName.equals(rootStack.name)) {
+			computeEndElementMatches(rootStack);
+		} else {
+	  		for(TPEStack s :  rootStack.getDescendantStacks()){
+	  			if (s.name.equals(qName) && s.spar.matches.size()!=0 && s.top().isOpen() && s.top().currentPre == preOflastOpen) {
+	  				computeEndElementMatches(s);
+	  			}
+	  		}
 		}
-  		
-  		for(TPEStack s :  rootStack.getDescendantStacks()){
-  			if (s.p.name.equals(qName) && s.spar.matches.size()!=0 && s.top().isOpen() && s.top().currentPre == preOflastOpen) {
-  				// all descendants of this Match have been traversed by now.
-  				Match m = s.top();
-  				// check if m has child matches for all children
-  				// of its pattern node
-  				for (TPEStack sChild : s.p.getChildren()){
-  					// pChild is a child of the query node for which m was created
-  					if (m.children.get(sChild.p) == null){
-  						System.out.println("REMOVE!");
-  						// m lacks a child Match for the pattern node pChild
-  						// we remove m from its Stack, detach it from its parent etc.
-  						remove(m, s);
-  					}
-  				}
-  				m.close();
-  			}
-  		}
+	}
+		
+	private void computeEndElementMatches(TPEStack s) {
+		// all descendants of this Match have been traversed by now.
+			Match m = s.top();
+			// check if m has child matches for all children
+			// of its pattern node
+			for (TPEStack sChild : s.getChildren()){
+				// pChild is a child of the query node for which m was created
+				if (m.children.get(sChild) == null){
+					////System.out.println("REMOVE!");
+					// m lacks a child Match for the pattern node pChild
+					// we remove m from its Stack, detach it from its parent etc.
+					remove(m, s);
+				}
+			}
+			m.close();
 	}
 
 	private void remove(Match m, TPEStack s) {
