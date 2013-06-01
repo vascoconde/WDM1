@@ -104,7 +104,7 @@ public class StackEval extends DefaultHandler {
 			// of its pattern node
 			for (TPEStack sChild : s.getChildren()){
 				// pChild is a child of the query node for which m was created
-				if (m.children.get(sChild) == null){
+				if (m.children.get(sChild) == null && !sChild.isOptional()){
 					////System.out.println("REMOVE!");
 					// m lacks a child Match for the pattern node pChild
 					// we remove m from its Stack, detach it from its parent etc.
