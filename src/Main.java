@@ -26,15 +26,15 @@ public class Main {
 			TPEStack root = tp.root;
 			
 			// -------------- root.addChildren(<name>, <optional>, <anyDescendancy>);
-			TPEStack mail = root.addChildren("mail", true, false);
-			//TPEStack name = root.addChildren("name", false, false);
-			TPEStack last = root.addChildren("last", false, false);
+			TPEStack mail = root.addChildren("mail", false, false);
+			TPEStack name = root.addChildren("name", true, false);
+			TPEStack last = name.addChildren("last", false, true);
 			
 			//Create an instance of this class; it defines all the handler methods
 			StackEval handler = new StackEval(root);
 			
 			sp.setContentHandler(handler);
-			sp.parse("data/people.xml");
+			sp.parse("data/people2.xml");
 
 			printResults(root);
 

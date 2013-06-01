@@ -1,5 +1,6 @@
 package stackEval;
 
+import java.util.Map;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -43,6 +44,7 @@ public class StackEval extends DefaultHandler {
 				rootStack.push(m);
 			}
 		} else {
+			Map<TPEStack, Integer> pChildren;
 			for(TPEStack s : rootStack.getDescendantStacks()){
 				////System.out.println("Analysing "+s.name+" stack for qName "+qName);
 				if(!s.getAnyDescendancy() && s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0  && s.spar.top().currentPre != preOfOpenNodes.peek()) {
@@ -50,12 +52,16 @@ public class StackEval extends DefaultHandler {
 				}
 				if(qName.equals(s.name) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
 					
-					////System.out.println("##### MATCH FOUND!!");
+					//System.out.println("##### MATCH FOUND!!" + qName);
 					Match m = new Match(currentPre, s.spar.top(), s);
 					// create a match satisfying the ancestor conditions
 					// of query node s.p
-					s.push(m); 
-					s.spar.top().children.put(s, s.matches);
+					s.push(m);
+					pChildren = s.spar.top().children;
+					if(pChildren.containsKey(s))
+						pChildren.put(s, pChildren.get(s)+1);
+					else
+						pChildren.put(s, 1);
 				}
 			}
 		}
@@ -128,9 +134,9 @@ public class StackEval extends DefaultHandler {
 
 	private void remove(Match m, TPEStack s) {
 		s.matches.pop();
-		for(Stack<Match> matches : m.children.values()) {
-			remove(matches.peek(), matches.peek().stack);
-			//matches.pop();
+		for(TPEStack stack : m.children.keySet()) {
+			for(int i = 0; i<m.children.get(stack); i++)
+				remove(stack.matches.peek(), stack.matches.peek().stack);
 		}
 	}
 }
