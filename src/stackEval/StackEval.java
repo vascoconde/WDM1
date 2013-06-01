@@ -38,11 +38,18 @@ public class StackEval extends DefaultHandler {
 
 		if(qName.equals(rootStack.name)) {
 			Match m = new Match(currentPre, null, null);
-			rootStack.push(m);
+			if((preOfOpenNodes.size()==1) || rootStack.getAnyDescendancy()) {
+				System.out.println(qName+" Child of document root with anyDescendancy="+rootStack.getAnyDescendancy());
+				rootStack.push(m);
+			}
 		} else {
 			for(TPEStack s : rootStack.getDescendantStacks()){
 				////System.out.println("Analysing "+s.name+" stack for qName "+qName);
+				if(!s.getAnyDescendancy() && s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0  && s.spar.top().currentPre != preOfOpenNodes.peek()) {
+					continue;
+				}
 				if(qName.equals(s.name) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
+					
 					////System.out.println("##### MATCH FOUND!!");
 					Match m = new Match(currentPre, s.spar.top(), s);
 					// create a match satisfying the ancestor conditions
@@ -87,9 +94,14 @@ public class StackEval extends DefaultHandler {
   		
   		//TODO Caso especial da root da TP
 		if(qName.equals(rootStack.name)) {
-			computeEndElementMatches(rootStack);
+			if((preOfOpenNodes.size()==1) || rootStack.getAnyDescendancy()) {
+				computeEndElementMatches(rootStack);
+			}
 		} else {
-	  		for(TPEStack s :  rootStack.getDescendantStacks()){
+	  		for(TPEStack s : rootStack.getDescendantStacks()){
+	  			if(!s.getAnyDescendancy() && s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0 && s.spar.top().currentPre != preOfOpenNodes.peek()) {
+					continue;
+				}
 	  			if (s.name.equals(qName) && s.spar.matches.size()!=0 && s.top().isOpen() && s.top().currentPre == preOflastOpen) {
 	  				computeEndElementMatches(s);
 	  			}

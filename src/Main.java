@@ -21,11 +21,14 @@ public class Main {
 			XMLReader sp = XMLReaderFactory.createXMLReader();
 
 			// Tree patter creation
+			
 			TreePattern tp = new TreePattern("person", false);
 			TPEStack root = tp.root;
+			
+			// -------------- root.addChildren(<name>, <optional>, <anyDescendancy>);
 			TPEStack mail = root.addChildren("mail", true, false);
-			TPEStack name = root.addChildren("name", false, false);
-			TPEStack last = name.addChildren("last", false, false);
+			//TPEStack name = root.addChildren("name", false, false);
+			TPEStack last = root.addChildren("last", false, false);
 			
 			//Create an instance of this class; it defines all the handler methods
 			StackEval handler = new StackEval(root);
