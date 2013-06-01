@@ -123,9 +123,10 @@ public class StackEval extends DefaultHandler {
 	}
 
 	private void remove(Match m, TPEStack s) {
+		s.matches.pop();
 		for(Stack<Match> matches : m.children.values()) {
 			remove(matches.peek(), matches.peek().stack);
-			matches.pop();
+			//matches.pop();
 		}
 	}
 }
