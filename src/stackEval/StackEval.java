@@ -51,7 +51,6 @@ public class StackEval extends DefaultHandler {
 					continue;
 				}
 				if(qName.equals(s.name) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
-					
 					//System.out.println("##### MATCH FOUND!!" + qName);
 					Match m = new Match(currentPre, s.spar.top(), s);
 					// create a match satisfying the ancestor conditions
