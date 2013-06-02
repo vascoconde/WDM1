@@ -6,7 +6,10 @@
       </person>
       <person>
             <name>
-            	<first>b_first</first>
+            	<first>
+					<one>M</one>
+					<teo>J</teo>
+            	</first>
             	<last>b_last</last>
             </name>
       </person>

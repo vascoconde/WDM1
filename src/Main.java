@@ -25,10 +25,11 @@ public class Main {
 			TreePattern tp = new TreePattern("person", false);
 			TPEStack root = tp.root;
 			
-			// -------------- root.addChildren(<name>, <optional>, <anyDescendancy>);
-			TPEStack mail = root.addChildren("mail", false, false);
-			TPEStack name = root.addChildren("name", true, false);
-			TPEStack last = name.addChildren("last", false, true);
+			// ------------ root.addChildren(<name>, <optional>, <anyDescendancy>);
+			//TPEStack any = root.addChildren("*", false, false);
+			TPEStack any = root.addChildren("*", false, false);
+			TPEStack any2 = any.addChildren("*", false, false);
+			TPEStack one = any2.addChildren("one", false, false);
 			
 			//Create an instance of this class; it defines all the handler methods
 			StackEval handler = new StackEval(root);

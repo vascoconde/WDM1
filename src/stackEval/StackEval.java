@@ -44,27 +44,52 @@ public class StackEval extends DefaultHandler {
 				rootStack.push(m);
 			}
 		} else {
+			System.out.println("Analysing "+qName);
 			Map<TPEStack, Integer> pChildren;
 			for(TPEStack s : rootStack.getDescendantStacks()){
 				////System.out.println("Analysing "+s.name+" stack for qName "+qName);
-				if(!s.getAnyDescendancy() && s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0  && s.spar.top().currentPre != preOfOpenNodes.peek()) {
+				if(!s.getAnyDescendancy() && isNotChildOfLastOpenElement(s)) {
+					System.out.println("ignored "+s.name+" because dependency");
 					continue;
 				}
-				if(qName.equals(s.name) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
-					//System.out.println("##### MATCH FOUND!!" + qName);
-					Match m = new Match(currentPre, s.spar.top(), s);
+				System.out.println("Testing stack "+s.name);
+				if((qName.equals(s.name) || (s.name.equals("*") && isDescendantLastOpenElement(s,currentPre))) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
+					System.out.println("##### MATCH FOUND in " + qName + " with stack "+s.name);
+
+					Match mParent = null;
+					for(Match m : s.spar.matches) {
+						if(m.currentPre == preOfOpenNodes.peek()) {
+							mParent = m;
+						}
+					}
+
+					Match m;
+					if(mParent!=null)
+						m = new Match(currentPre, mParent, s);
+					else
+						m = new Match(currentPre, s.spar.top(), s);
+
 					// create a match satisfying the ancestor conditions
 					// of query node s.p
 					s.push(m);
-					pChildren = s.spar.top().children;
+
+					if(mParent!=null)
+						pChildren = mParent.children;
+					else
+						pChildren = s.spar.top().children;
+
 					if(pChildren.containsKey(s))
 						pChildren.put(s, pChildren.get(s)+1);
 					else
 						pChildren.put(s, 1);
+					/*
+					if(s.name.equals("*")) {
+						System.out.println("Match criado para "+"* em last");
+					}*/
 				}
 			}
 		}
-		
+
 		for (int i = 0; i < attributes.getLength(); i++){
 			String a = attributes.getQName(i);
 			//System.out.format("Attribute: %s\n", a);
@@ -77,10 +102,10 @@ public class StackEval extends DefaultHandler {
 				}
 			}
 		}
-		
+
 		preOfOpenNodes.push(currentPre);
 		currentPre++;
-		
+
 	}
 
 	/*
@@ -91,53 +116,111 @@ public class StackEval extends DefaultHandler {
 			throws SAXException {
 		////System.out.println("End Element");
 
-  		// we need to find out if the element ending now corresponded
-  		// to matches in some stacks
-  		// first, get the pre number of the element that ends now:
-  		int preOflastOpen = preOfOpenNodes.pop();
-  		// now look for Match objects having this pre number:
-  		
-  		//TODO Caso especial da root da TP
+		// we need to find out if the element ending now corresponded
+		// to matches in some stacks
+		// first, get the pre number of the element that ends now:
+		int preOflastOpen = preOfOpenNodes.pop();
+		// now look for Match objects having this pre number:
+		System.out.println("END ELEMENT: "+qName);
+		System.out.println("preOflastOpen: "+preOflastOpen);
+
+		//TODO Caso especial da root da TP
 		if(qName.equals(rootStack.name)) {
 			if((preOfOpenNodes.size()==1) || rootStack.getAnyDescendancy()) {
 				computeEndElementMatches(rootStack);
 			}
 		} else {
-	  		for(TPEStack s : rootStack.getDescendantStacks()){
-	  			if(!s.getAnyDescendancy() && s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0 && s.spar.top().currentPre != preOfOpenNodes.peek()) {
+			for(TPEStack s : rootStack.getDescendantStacks()){
+				if(!s.getAnyDescendancy() && isNotChildOfLastOpenElement(s)) {
+					System.out.println("Skip to: "+s.name);
 					continue;
 				}
-	  			if (s.name.equals(qName) && s.spar.matches.size()!=0 && s.top().isOpen() && s.top().currentPre == preOflastOpen) {
-	  				computeEndElementMatches(s);
-	  			}
-	  		}
-		}
-	}
-		
-	private void computeEndElementMatches(TPEStack s) {
-		// all descendants of this Match have been traversed by now.
-			Match m = s.top();
-			// check if m has child matches for all children
-			// of its pattern node
-			for (TPEStack sChild : s.getChildren()){
-				// pChild is a child of the query node for which m was created
-				if (m.children.get(sChild) == null && !sChild.isOptional()){
-					////System.out.println("REMOVE!");
-					// m lacks a child Match for the pattern node pChild
-					// we remove m from its Stack, detach it from its parent etc.
-					remove(m, s);
+				// || s.name.equals("*") && isDescendantLastOpenElement2(s,preOflastOpen)) 
+				System.out.println("testing --> "+s.name);
+				if((qName.equals(s.name) || (s.name.equals("*") && isDescendantLastOpenElement2(s,preOflastOpen)))) {
+					System.out.println("Condition true for "+s.name);
+					if(s.spar.matches.size()!=0 && s.spar.top().isOpen()){
+						System.out.println("Going to compute end element matches in "+qName);
+						computeEndElementMatches(s);
+					}
 				}
 			}
-			m.close();
+		}
 	}
 
+	private void computeEndElementMatches(TPEStack s) {
+		// all descendants of this Match have been traversed by now.
+		System.out.println("Name: "+s.name);
+		Match m = s.top();
+
+		// check if m has child matches for all children
+		// of its pattern node
+		for (TPEStack sChild : s.getChildren()){
+			// pChild is a child of the query node for which m was created
+			System.out.println("testing sChild: "+sChild.name);
+			System.out.println("m.child.get... "+m.children.get(sChild));
+			if ((m.children.get(sChild) == null || m.children.get(sChild) == 0) && !sChild.isOptional()){
+				System.out.println("TRUE");
+				////System.out.println("REMOVE!");
+				// m lacks a child Match for the pattern node pChild
+				// we remove m from its Stack, detach it from its parent etc.
+				remove(m, s);
+			}
+		}
+		m.close();
+	}
+
+
 	private void remove(Match m, TPEStack s) {
-		s.matches.pop();
+		System.out.println("ET VOILA: "+s.matches.pop().currentPre);
+		Map<TPEStack, Integer> pChildren;
+		if(s.spar!=null && s.spar.matches.size()!=0) {
+			pChildren = s.spar.top().children;
+			if(pChildren.containsKey(s))
+				pChildren.put(s, pChildren.get(s)-1);
+		}
 		for(TPEStack stack : m.children.keySet()) {
 			for(int i = 0; i<m.children.get(stack); i++)
 				remove(stack.matches.peek(), stack.matches.peek().stack);
 		}
 	}
+
+	private boolean isNotChildOfLastOpenElement(TPEStack s) {
+		boolean found = true;
+		if(s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0) {
+			System.out.println("s.spar.top().currentPre: "+s.spar.top().currentPre);
+			System.out.println("preOfOpenNodes.peek(): "+preOfOpenNodes.peek());
+			found = false;
+			for(Match m : s.spar.matches) {
+				//if(s.spar.top().currentPre != preOfOpenNodes.peek())
+				if(m.currentPre == preOfOpenNodes.peek()) {
+					found = true;
+				}
+			}
+		}
+		return !found;
+	}
+
+	private boolean isNotChildOfLastOpenElementEnd(TPEStack s, int i) {
+		if(s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0) {
+			if(s.spar.top().currentPre != i)
+				return true;
+		}
+		return false;
+	}
+
+	private boolean isDescendantLastOpenElement(TPEStack s, int currentNodeID) {
+		boolean r = s.spar.matches.size()!=0 && preOfOpenNodes.size()!= 0  &&  s.spar.top().currentPre < currentNodeID;
+		//System.out.println("currentNodeID: "+currentNodeID+"\nresult: "+r);
+		return r;
+	}
+
+	private boolean isDescendantLastOpenElement2(TPEStack s, int currentNodeID) {
+		boolean r = s.matches.size()!=0 && preOfOpenNodes.size()!= 0  &&  currentNodeID > s.spar.top().currentPre ;
+		System.out.println("currentNodeID: "+currentNodeID+"\nresult: "+r);
+		return r;
+	}
+
 }
 
 
