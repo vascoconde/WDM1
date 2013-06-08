@@ -46,12 +46,12 @@ public class Main {
 
 	}
 	
-	public static void printResults(TPEStack root) {
+public static void printResults(TPEStack root) {
 		
 		ArrayList<TPEStack> temp = new ArrayList<TPEStack>();
 		temp.add(root);
 		TPEStack s = null;
-		String print = "";
+		String print = "\n----------------------------------\n Results: \n----------------------------------\n";
 		int counter = temp.size();
 		for(int i=0; i<counter; i++) {
 			s = temp.get(i);
@@ -63,7 +63,7 @@ public class Main {
 			temp.addAll(s.children);
 			counter += s.children.size();
 		}
-		System.out.println(print);
+		System.out.println(print+"----------------------------------");
 	}
 
 }
