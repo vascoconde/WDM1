@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<people>
+      <person>
+            <email provider='Google'>a@a.com</email>
+			<last>Jones</last>
+      </person>
+      <person>
+            <name>
+            	<first>John
+					<one>Mary</one>
+					<two>Jane</two>
+            	</first>
+            	<last family='J'>Watson</last>
+            </name>
+      </person>
+      <person>
+            <email provider='PT'>c@c.pt</email>
+            <email>c@c.com</email>
+            <name>
+            	<first>Philip</first>
+            	<last>McCain</last>
+            </name>
+      </person>
+</people>

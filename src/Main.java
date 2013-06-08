@@ -22,13 +22,14 @@ public class Main {
 
 			// Tree patter creation
 			
-			TreePattern tp = new TreePattern("person", true);
+			TreePattern tp = new TreePattern("*", true);
 			TPEStack root = tp.root;
 			
 			// ------------ root.addChildren(<name>, <optional>, <anyDescendancy>);
-			TPEStack any = root.addChildren("*", false, true);
-			//TPEStack any2 = any.addChildren("*", false, false);
-			//TPEStack any2 = any.addChildren("*", false, false);
+			TPEStack name = root.addChildren("name", false, false);
+			//last.setPredicateValue("McCain");
+			//TPEStack email = root.addChildren("email", false, false);
+			//TPEStack last = name.addChildren("last", false, false);
 			//TPEStack one = any2.addChildren("one", false, false);
 			
 			//Create an instance of this class; it defines all the handler methods
