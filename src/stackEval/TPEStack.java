@@ -1,7 +1,9 @@
 package stackEval;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Stack;
+import java.util.Vector;
 
 public class TPEStack {
 	public String name;
@@ -45,6 +47,16 @@ public class TPEStack {
 	
 	public void push(Match m){ 
 		matches.push(m); 
+	}
+	
+	public Match firstOpen(){
+		ArrayList<Match> a = new ArrayList<Match>(matches);
+		Collections.reverse(a);
+		for(Match m : a) {
+			if(m.isOpen())
+				return m;
+		}
+		return null; 
 	}
 	
 	public Match top(){ 

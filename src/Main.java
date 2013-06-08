@@ -22,20 +22,20 @@ public class Main {
 
 			// Tree patter creation
 			
-			TreePattern tp = new TreePattern("person", false);
+			TreePattern tp = new TreePattern("*", true);
 			TPEStack root = tp.root;
 			
 			// ------------ root.addChildren(<name>, <optional>, <anyDescendancy>);
-			//TPEStack any = root.addChildren("*", false, false);
-			TPEStack any = root.addChildren("*", false, false);
-			TPEStack any2 = any.addChildren("*", false, false);
+			TPEStack any = root.addChildren("last", false, false);
+			//TPEStack any2 = any.addChildren("*", false, false);
+			//TPEStack any2 = any.addChildren("*", false, false);
 			//TPEStack one = any2.addChildren("one", false, false);
 			
 			//Create an instance of this class; it defines all the handler methods
 			StackEval handler = new StackEval(root);
 			
 			sp.setContentHandler(handler);
-			sp.parse("data/people.xml");
+			sp.parse("data/people2.xml");
 
 			printResults(root);
 
