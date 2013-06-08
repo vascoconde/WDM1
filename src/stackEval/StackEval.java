@@ -51,7 +51,7 @@ public class StackEval extends DefaultHandler {
 					continue;
 				}
 				System.out.println("Testing stack "+s.name);
-				if((qName.equals(s.name) || (s.name.equals("*")) && isDescendantLastOpenElement(s,currentPre)) && s.spar.matches.size()!=0 && s.spar.top().isOpen()){
+				if((qName.equals(s.name) || s.name.equals("*")) && isDescendantLastOpenElement(s,currentPre)){
 					System.out.println("##### MATCH FOUND in " + qName + " with stack "+s.name);
 
 					Match mParent = null;
@@ -78,11 +78,9 @@ public class StackEval extends DefaultHandler {
 						pChildren = s.spar.top().children;
 
 					if(pChildren.containsKey(s)) {
-						System.out.println("Added match in "+mParent.currentPre);
 						pChildren.put(s, pChildren.get(s)+1);
 					}
 					else {
-						System.out.println("Added match in "+mParent.currentPre);
 						pChildren.put(s, 1);
 					}
 
@@ -225,7 +223,7 @@ public class StackEval extends DefaultHandler {
 
 	private boolean isDescendantLastOpenElement(TPEStack s, int currentNodeID) {
 		for(Match m : s.spar.matches) {
-			if(preOfOpenNodes.size()!= 0 && m.currentPre == preOfOpenNodes.peek()) {
+			if(preOfOpenNodes.size()!= 0 && m.currentPre <= preOfOpenNodes.peek()) {
 				return true;
 			}
 		}

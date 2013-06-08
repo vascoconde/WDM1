@@ -22,11 +22,11 @@ public class Main {
 
 			// Tree patter creation
 			
-			TreePattern tp = new TreePattern("*", true);
+			TreePattern tp = new TreePattern("person", true);
 			TPEStack root = tp.root;
 			
 			// ------------ root.addChildren(<name>, <optional>, <anyDescendancy>);
-			TPEStack any = root.addChildren("last", false, false);
+			TPEStack any = root.addChildren("*", false, true);
 			//TPEStack any2 = any.addChildren("*", false, false);
 			//TPEStack any2 = any.addChildren("*", false, false);
 			//TPEStack one = any2.addChildren("one", false, false);
