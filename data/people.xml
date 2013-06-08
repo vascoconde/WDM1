@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <people>
       <person>
-            <mail>a@a.com</mail>
+            <email>a@a.com</email>
             <name>
             	<first>a_first</first>
             	<last>a_last</last>
@@ -14,8 +14,8 @@
             </name>
       </person>
       <person>
-            <mail>c@c.pt</mail>
-            <mail>c@c.com</mail>
+            <email>c@c.pt</email>
+            <email>c@c.com</email>
             <name>
             	<first>c_first</first>
             	<last>c_last</last>

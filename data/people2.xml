@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <people>
       <person>
-            <mail>a@a.com</mail>
-			<last>a_last</last>
+            <email>a@a.com</email>
+			<last>Jones</last>
       </person>
       <person>
             <name>
             	<first>
-					<one>M</one>
-					<teo>J</teo>
+					<one>Mary</one>
+					<two>Jane</two>
             	</first>
-            	<last>b_last</last>
+            	<last>Watson</last>
             </name>
       </person>
       <person>
-            <mail>c@c.pt</mail>
-            <mail>c@c.com</mail>
+            <email>c@c.pt</email>
+            <email>c@c.com</email>
             <name>
-            	<first>c_first</first>
-            	<last>c_last</last>
+            	<first>Philip</first>
+            	<last>McCain</last>
             </name>
       </person>
 </people>
