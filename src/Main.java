@@ -22,21 +22,102 @@ public class Main {
 
 			// Tree patter creation
 			
-			TreePattern tp = new TreePattern("*", true);
-			TPEStack root = tp.root;
+			//TreePattern tp = new TreePattern("*", true);
+			//TPEStack root = tp.root;
 			
 			// ------------ root.addChildren(<name>, <optional>, <anyDescendancy>);
-			TPEStack name = root.addChildren("name", false, false);
-			//last.setPredicateValue("McCain");
-			//TPEStack email = root.addChildren("email", false, false);
+			//TPEStack last = root.addChildren("last", false, true);
+			//TPEStack name = root.addChildren("name", false, false);
 			//TPEStack last = name.addChildren("last", false, false);
+			//last.setPredicateValue("McCain");
 			//TPEStack one = any2.addChildren("one", false, false);
+			
+			/* 
+			//Query 1
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack email = root.addChildren("email", false, false);
+			TPEStack name = root.addChildren("name", false, false);
+			TPEStack last = name.addChildren("last", false, false);
+			*/
+			
+			//Query 2
+			/*
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack email = root.addChildren("email", true, false);
+			TPEStack name = root.addChildren("name", false, false);
+			TPEStack last = name.addChildren("last", false, false);
+			*/
+			
+			//Query 3
+			/*
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack any = root.addChildren("*", false, false);
+			TPEStack last = any.addChildren("last", false, false);
+			*/
+			
+			//Query 4
+			/*
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack last = root.addChildren("last", false, true);
+			*/
+			
+			//Query 5
+			/*
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack name = root.addChildren("name", false, false);
+			TPEStack any = name.addChildren("*", false, true);
+			*/
+			
+			//Query 6
+			/*
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack any1 = root.addChildren("*", false, false);
+			TPEStack any2 = any1.addChildren("*", false, false);
+			*/
+			
+			//Query 7
+			/*
+			TreePattern tp = new TreePattern("*", true);
+			TPEStack root = tp.root;
+			TPEStack any2 = root.addChildren("last", false, true);
+			*/
+			
+			//Query 8
+			/*
+			TreePattern tp = new TreePattern("*", true);
+			TPEStack root = tp.root;
+			TPEStack any1 = root.addChildren("*", false, true);
+			TPEStack any2 = any1.addChildren("last", false, false);
+			*/
+			
+			//Attribute Queries
+			
+			//Query 1
+			/*
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack any = root.addChildren("*", false, true);
+			TPEStack att = any.addChildren("@*", false, false);
+			*/
+			
+			//Query 2
+			TreePattern tp = new TreePattern("person", true);
+			TPEStack root = tp.root;
+			TPEStack any = root.addChildren("*", false, true);
+			TPEStack att = any.addChildren("@*", false, false);
+			att.setPredicateValue("J");
 			
 			//Create an instance of this class; it defines all the handler methods
 			StackEval handler = new StackEval(root);
 			
 			sp.setContentHandler(handler);
-			sp.parse("data/people2.xml");
+			sp.parse("data/people2Att.xml");
 
 			printResults(root);
 

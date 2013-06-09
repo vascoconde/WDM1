@@ -21,7 +21,7 @@ public class StackEval extends DefaultHandler {
 	public void characters(char[] buffer, int start, int length) {
 		String s = new String(buffer, start, length);
 		if(!(s.trim().isEmpty())) {
-			
+
 			System.out.format("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWw Characters:%s\n", s);
 		}
 	}
@@ -62,7 +62,7 @@ public class StackEval extends DefaultHandler {
 				ArrayList<Match> mParents = new ArrayList<Match>();
 
 				for(Match match : s.spar.matches)
-					if(match.isOpen() && match.currentPre < currentPre)
+					if(match.isOpen() && ((match.currentPre < currentPre && s.getAnyDescendancy()) || match.currentPre == preOfOpenNodes.peek()))
 						mParents.add(match);
 
 				if(mParents.size() > 0)
@@ -103,7 +103,8 @@ public class StackEval extends DefaultHandler {
 					if(s.getPredicateValue() == null || attributes.getValue(i).equals(s.getPredicateValue())) {
 
 						for(Match match : s.spar.matches)
-							if(match.isOpen() && match.currentPre < currentPre)
+							//if(match.isOpen() && match.currentPre < currentPre)
+							if(match.isOpen() && ((match.currentPre < currentPre && s.getAnyDescendancy()) || match.currentPre == preOfOpenNodes.peek()))
 								mParents.add(match);
 
 						if(mParents.size() > 0)
@@ -156,6 +157,8 @@ public class StackEval extends DefaultHandler {
 				computeEndElementMatches(rootStack,m);
 		}
 
+		//ArrayList<TPEStack> temp = new ArrayList<TPEStack>(rootStack.getDescendantStacks());
+		//Collections.reverse(temp);
 		for(TPEStack s : rootStack.getDescendantStacks()){
 			if(!s.getAnyDescendancy() && isNotChildOfLastOpenElement(s)) {
 				System.out.println("Skip to: "+s.name);
@@ -193,23 +196,23 @@ public class StackEval extends DefaultHandler {
 				}
 			}
 		}
-		
 		m.close();
-
 	}
 
 	private void remove(Match m, TPEStack s) {
-		s.matches.remove(s.firstOpen());
+		s.matches.remove(m);
 		//Match removed = s.matches.pop();
 		//System.out.println("ET VOILA: "+removed.currentPre);
 
 		Map<TPEStack, Integer> pChildren;
 		if(s.spar!=null) {
-			Match pMatch = s.spar.firstOpen();
-			if(pMatch!=null) {
-				pChildren = pMatch.children;
-				if(pChildren.containsKey(s))
-					pChildren.put(s, pChildren.get(s)-1);
+			//Match pMatch = s.spar.firstOpen();
+			for(Match pMatch : s.spar.matches) {
+				if(pMatch.isOpen() && pMatch.currentPre < m.currentPre) {
+					pChildren = pMatch.children;
+					if(pChildren.containsKey(s))
+						pChildren.put(s, pChildren.get(s)-1);
+				}
 			}
 		}
 		for(TPEStack stack : m.children.keySet()) {
