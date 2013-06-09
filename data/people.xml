@@ -8,17 +8,15 @@
             </name>
       </person>
       <person>
-            <name>
-            	<first>b_first</first>
-            	<last>b_last</last>
-            </name>
+            <name>João</name>
       </person>
       <person>
             <email>c@c.pt</email>
             <email>c@c.com</email>
             <name>
-            	<first>c_first</first>
-            	<last>c_last</last>
+            	<last>
+            		<one>Sousa</one>
+				</last>
             </name>
       </person>
 </people>
